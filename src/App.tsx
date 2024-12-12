@@ -3,6 +3,8 @@ import { Calendar } from "@/components/ui/calendar"
 import { useState,useEffect } from 'react'
 import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button'
+import { FiTrash2 } from "react-icons/fi";
+import { FiEdit } from 'react-icons/fi'
 
 interface EventInterface{
     date: Date|undefined
@@ -20,19 +22,27 @@ function App() {
   const [endtime,setEndtime]=useState<string>('')
   const [allevents,setAllevents]=useState<EventInterface[]>([])
   const [events,setEvents]=useState<EventInterface[]>([]);
+  const [isWindowOpen,setIsWindowOpen]=useState(false);
+  const [eventindex,setEventIndex]=useState<number|null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  useEffect(() => {
-    const storedEvents = localStorage.getItem('events');
-    if (storedEvents) {
-      setAllevents(JSON.parse(storedEvents));
-    } else {
-      setAllevents([]);
-    }
-}, []);
+// useEffect(() => {
+//     const storedEvents = localStorage.getItem('events');
+//     if (storedEvents) {
+//       setAllevents(JSON.parse(storedEvents));
+//     }else{
+//       setAllevents([]);
+//     }
+//     setIsInitialized(true);
+// }, []);
 
-useEffect(() => {
-    localStorage.setItem('events', JSON.stringify(allevents));
-}, [allevents]);
+// useEffect(() => {
+//   if(allevents){ 
+//     if(isInitialized==true){
+//         localStorage.setItem('events', JSON.stringify(allevents));
+//     }
+//   }
+// }, [allevents,isInitialized]);
 
   function handleventadd(){
     if(!date) return;
@@ -67,6 +77,42 @@ useEffect(() => {
     filterEventsByDate(date);
   }, [allevents, date]);
 
+  function deleteEvent(index:number){
+    const filteredevents=allevents.filter((allevent,i)=>
+        i!==index
+    )
+    setAllevents(filteredevents);
+  }
+
+  function openUpdateModal(index: number) {
+    setEventIndex(index);
+    const event = allevents[index];
+    setTitle(event.title);
+    setDescription(event.description);
+    setStarttime(event.starttime);
+    setEndtime(event.endtime);
+    setIsWindowOpen(true);
+  }
+
+  function updateevent(){
+    if (eventindex !== null) {
+      const updatedEvents = [...allevents];
+      updatedEvents[eventindex] = {
+        ...updatedEvents[eventindex],
+        title,
+        description,
+        starttime,
+        endtime,
+      };
+      setAllevents(updatedEvents);
+      setIsWindowOpen(false);
+      setTitle("");
+      setDescription("");
+      setStarttime("");
+      setEndtime("");
+    }
+  }
+
   return (
     <div className="h-screen w-screen flex">
       <div className="w-1/4 bg-neutral-700 text-gray-200 p-4 space-y-4">
@@ -84,6 +130,17 @@ useEffect(() => {
               <span className="font-semibold">Time:</span> {event.starttime} -{" "}
               {event.endtime}
             </div>
+
+            <div className="flex items-center justify-center space-x-4">
+            <FiEdit
+              className="text-blue-500 cursor-pointer hover:text-blue-700 text-lg transition-transform duration-300 ease-in-out"
+              onClick={() => openUpdateModal(index)}
+            />
+            <FiTrash2
+              className="text-red-500 cursor-pointer hover:text-red-700 text-lg transition-transform duration-300 ease-in-out"
+              onClick={() => deleteEvent(index)}
+            />
+          </div> 
           </div>
         ))
       ) : (
@@ -107,7 +164,7 @@ useEffect(() => {
         placeholder="Title" 
         value={title}
         onChange={(e)=>setTitle(e.target.value)}
-        className="w-className=''64 p-2 rounded-md border bg-neutral-900 text-gray-200"
+        className="w-64 p-2 rounded-md border bg-neutral-900 text-gray-200"
       />
 
       <Input
@@ -144,7 +201,47 @@ useEffect(() => {
 
     </div>
     </div>
+
+    {isWindowOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-neutral-900 p-6 rounded-lg shadow-lg space-y-4">
+            <div className="text-xl font-semibold text-gray-200">Update Event</div>
+            <Input
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-64 p-2 rounded-md border bg-neutral-900 text-gray-200"
+            />
+            <Input
+              placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-64 p-2 rounded-md border bg-neutral-900 text-gray-200"
+            />
+            <Input
+              placeholder="Start Time"
+              type="time"
+              value={starttime}
+              onChange={(e) => setStarttime(e.target.value)}
+              className="w-64 p-2 rounded-md border bg-neutral-900 text-gray-200"
+            />
+            <Input
+              placeholder="End Time"
+              type="time"
+              value={endtime}
+              onChange={(e) => setEndtime(e.target.value)}
+              className="w-64 p-2 rounded-md border bg-neutral-900 text-gray-200"
+            />
+            <div className="flex justify-between mt-4">
+              <Button onClick={() => setIsWindowOpen(false)}>Cancel</Button>
+              <Button onClick={updateevent}>Update</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
+
   );
 }
 
