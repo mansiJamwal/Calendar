@@ -3,7 +3,7 @@
 ## Overview
 
 The **Event Calendar** is a web application built using **React** for functionality and **ShadCN** for UI components. It allows users to add, edit, and delete events seamlessly, with an intuitive interface for navigating events on a calendar.
-
+The website is hosted at the url: https://calendar-ecru-beta.vercel.app/
 ## Features
 
 - **Add Events**: Create new events by selecting a date and entering details.
@@ -18,6 +18,7 @@ The **Event Calendar** is a web application built using **React** for functional
 - **UI Library**: ShadCN
 - **State Management**: React Hooks
 - **Styling**: Tailwind CSS (via ShadCN)
+- **Deployment**: Vercel
 
 ## How to Use?
 
