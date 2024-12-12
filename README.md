@@ -1,50 +1,62 @@
-# React + TypeScript + Vite
+# Event Calendar
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+The **Event Calendar** is a web application built using **React** for functionality and **ShadCN** for UI components. It allows users to add, edit, and delete events seamlessly, with an intuitive interface for navigating events on a calendar.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Add Events**: Create new events by selecting a date and entering details.
+- **Edit Events**: Update event information with ease.
+- **Delete Events**: Remove events from the calendar.
+- **Calendar View**: View events in a monthly calendar format.
+- **Responsive Design**: Adaptable for various screen sizes.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Tech Stack
 
-- Configure the top-level `parserOptions` property like this:
+- **Frontend**: React(TypeScript)
+- **UI Library**: ShadCN
+- **State Management**: React Hooks
+- **Styling**: Tailwind CSS (via ShadCN)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## How to Use?
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Adding Events
+1. Click on a date in the calendar.
+2. Fill in the event details in the popup form.
+3. Save the event to add it to the calendar.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### Editing Events
+1. Click on an existing event.
+2. Modify the details in the popup form.
+3. Save changes to update the event.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Deleting Events
+1. Click on an existing event.
+2. Select the delete option to remove it from the calendar.
+
+## Getting Started
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+- Node.js (v14 or later)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/event-calendar.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd event-calendar
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
