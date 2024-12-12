@@ -7,6 +7,7 @@ import { FiTrash2 } from "react-icons/fi";
 import { FiEdit } from 'react-icons/fi'
 
 interface EventInterface{
+    id:number
     date: string
     title: string,
     description: string,
@@ -23,8 +24,8 @@ function App() {
   const [allevents,setAllevents]=useState<EventInterface[]>([])
   const [events,setEvents]=useState<EventInterface[]>([]);
   const [isWindowOpen,setIsWindowOpen]=useState(false);
-  const [eventindex,setEventIndex]=useState<number|null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const[index,setIndex]=useState<number|null>(null);
 
 useEffect(() => {
     const storedEvents = localStorage.getItem('events');
@@ -47,12 +48,14 @@ useEffect(() => {
   function handleventadd(){
     if(!date) return;
         const event={
+          id:allevents.length+1,
           date:(new Date(date)).toDateString(),
           title:title,
           description:description,
           starttime:starttime,
           endtime:endtime
         }
+
         setAllevents([...allevents,event])
         setTitle('');
         setDescription('');
@@ -76,15 +79,16 @@ useEffect(() => {
   }, [allevents, date]);
 
   function deleteEvent(index:number){
-    const filteredevents=allevents.filter((allevent,i)=>
-        i!==index
+    const filteredevents=allevents.filter((allevent)=>
+        allevent.id!==index
     )
     setAllevents(filteredevents);
   }
 
   function openUpdateModal(index: number) {
-    setEventIndex(index);
-    const event = allevents[index];
+    const eventindex=allevents.findIndex((allevent)=>allevent.id===index)
+    setIndex(eventindex)
+    const event=allevents[eventindex]
     setTitle(event.title);
     setDescription(event.description);
     setStarttime(event.starttime);
@@ -93,6 +97,7 @@ useEffect(() => {
   }
 
   function updateevent(){
+    const eventindex=index;
     if (eventindex !== null) {
       const updatedEvents = [...allevents];
       updatedEvents[eventindex] = {
@@ -118,15 +123,6 @@ useEffect(() => {
     <div className="space-y-2">
       {events.length > 0? (
         events.map((event, index) => {
-          const originalIndex = allevents.findIndex(
-            (e) =>
-              e.date === event.date &&
-              e.title === event.title &&
-              e.description === event.description &&
-              e.starttime === event.starttime &&
-              e.endtime === event.endtime
-          );
-
           return (
           <div
             key={index}
@@ -142,11 +138,11 @@ useEffect(() => {
             <div className="flex items-center justify-center space-x-4">
             <FiEdit
               className="text-blue-500 cursor-pointer hover:text-blue-700 text-lg transition-transform duration-300 ease-in-out"
-              onClick={() => openUpdateModal(originalIndex)}
+              onClick={() => openUpdateModal(event.id)}
             />
             <FiTrash2
               className="text-red-500 cursor-pointer hover:text-red-700 text-lg transition-transform duration-300 ease-in-out"
-              onClick={() => deleteEvent(originalIndex)}
+              onClick={() => deleteEvent(event.id)}
             />
           </div> 
           </div>
